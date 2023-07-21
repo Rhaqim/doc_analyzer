@@ -7,6 +7,8 @@ from preprocess import normalize
 
 app = Flask(__name__)
 
+logger = app.logger
+
 UPLOAD_FOLDER = "uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
@@ -26,8 +28,13 @@ def upload_file():
         if file:
             filename: str = file.filename  # type: ignore
 
+            logger.info(f"Received file: {filename}")
+
             # Save the uploaded file to the UPLOAD_FOLDER
             file_path = os.path.join(app.config["UPLOAD_FOLDER"], filename)
+
+            logger.info(f"Saving file to: {file_path}")
+
             try:
                 file.save(file_path)
             except FileNotFoundError:
@@ -36,17 +43,25 @@ def upload_file():
 
             # Preprocess based on the file type
             if filename.lower().endswith(".pdf"):
+                logger.info("PDF file detected")
+
                 # Convert the PDF to images (if scanned) and perform OCR
                 images = convert_from_path(file_path)
                 text_content = ""
+
+                logger.info(f"Number of pages: {len(images)}")
                 for i, image in enumerate(images):
                     image_path = os.path.join(app.config["UPLOAD_FOLDER"], f"page_{i}.png")
                     image.save(image_path, "PNG")
-                    # text_content += perform_ocr(image_path)
+
+                    logger.info("Image file detected, performing OCR")
+                    
                     text_content += normalize(image_path)
             elif filename.lower().endswith((".jpg", ".jpeg", ".png", ".tif", ".tiff")):
+
+                logger.info("Image file detected, performing OCR")
+
                 # Perform OCR directly on the image file
-                # text_content = perform_ocr(file_path)
                 text_content = normalize(file_path)
             else:
                 # For other file types like docx or text, read the content directly

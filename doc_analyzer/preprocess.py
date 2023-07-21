@@ -2,9 +2,12 @@ import os
 
 import cv2
 import pytesseract
+from main import logger
 
 
 def normalize(image_path: str) -> str:
+    logger.info("Normalizing image")
+
     # Read the image using OpenCV
     image = cv2.imread(image_path)
 
@@ -21,6 +24,8 @@ def normalize(image_path: str) -> str:
     normalized_image_path = image_path + "_normalized.png"
     cv2.imwrite(normalized_image_path, threshold_image)
 
+    logger.info(f"Normalized image saved to: {normalized_image_path}")
+
     # Perform OCR on the normalized image
     normalized_text = perform_ocr(normalized_image_path)
 
@@ -31,4 +36,5 @@ def normalize(image_path: str) -> str:
 
 # Function to perform OCR on scanned images
 def perform_ocr(image_path: str) -> str:
+    logger.info("Performing OCR")
     return pytesseract.image_to_string(image_path)

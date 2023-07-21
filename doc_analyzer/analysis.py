@@ -1,4 +1,5 @@
 import spacy
+from main import logger
 
 # Load the spaCy language model (make sure you have already installed the 'en_core_web_sm' model)
 nlp = spacy.load("en_core_web_sm")
@@ -12,6 +13,8 @@ def analyze_loan_agreement(text_content: str) -> dict:
 
     # Define a list of key words related to small loan agreements
     keywords = ["loan", "agreement", "borrower", "lender", "amount", "interest", "repayment", "due date", "default", "term"]
+
+    logger.info(f"Analyzing text content for keywords: {keywords}")
 
     # Initialize a dictionary to store the occurrences of key words
     keyword_occurrences = {keyword: 0 for keyword in keywords}
