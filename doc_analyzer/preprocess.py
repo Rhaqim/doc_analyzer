@@ -2,7 +2,7 @@ import os
 
 import cv2
 import pytesseract
-from main import logger
+from logger import logger
 
 
 def normalize(image_path: str) -> str:

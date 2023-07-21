@@ -1,5 +1,5 @@
 import spacy
-from main import logger
+from logger import logger
 
 # Load the spaCy language model (make sure you have already installed the 'en_core_web_sm' model)
 nlp = spacy.load("en_core_web_sm")
