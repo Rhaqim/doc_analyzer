@@ -1,6 +1,7 @@
 import os
 
 from analysis import analyze_loan_agreement
+from classifier import classify_document
 from flask import Flask, render_template, request
 from logger import logger
 from pdf2image.pdf2image import convert_from_path
@@ -54,10 +55,9 @@ def upload_file():
                     image.save(image_path, "PNG")
 
                     logger.info("Image file detected, performing OCR")
-                    
+
                     text_content += normalize(image_path)
             elif filename.lower().endswith((".jpg", ".jpeg", ".png", ".tif", ".tiff")):
-
                 logger.info("Image file detected, performing OCR")
 
                 # Perform OCR directly on the image file
@@ -71,13 +71,16 @@ def upload_file():
             # For this example, we'll just print it
             processed_doc = analyze_loan_agreement(text_content)
 
-            # return the processed file to the upload page
-            return render_template("upload.html", message=processed_doc)
+            # Classify the extracted text
+            predicted_label, confidence = classify_document(text_content)
 
-            # return render_template("upload.html", message="File successfully uploaded and processed.")
+            # return the processed file to the upload page
+            return render_template(
+                "upload.html", processed_doc=processed_doc, predicted_label=predicted_label, confidence=confidence
+            )
 
     return render_template("upload.html")
 
 
 if __name__ == "__main__":
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host="0.0.0.0", port=5001, debug=True)
