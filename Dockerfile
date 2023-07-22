@@ -3,7 +3,7 @@ FROM python:3.11
 
 # Install system dependencies required for OpenCV, pytesseract, poppler, and tesseract
 RUN apt-get update \
-    && apt-get install -y poppler-utils tesseract-ocr libgl1-mesa-glx \
+    && apt-get install -y poppler-utils tesseract-ocr libgl1-mesa-glx transformers \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
