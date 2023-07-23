@@ -6,8 +6,7 @@ This is a simple document analyzer app that accepts a file upload and outputs th
 
 ## Installation
 
-1. Clone the repository
-2. run the following commands in the root directory of the project:
+1. Run the following commands in the root directory of the project:
 
 ```bash
 docker build -t document-analyzer .
@@ -15,6 +14,12 @@ docker build -t document-analyzer .
 
 ```bash
 docker run -p 5001:5000 document-analyzer
+```
+
+1. With Docker-compose:
+
+```bash
+docker-compose up
 ```
 
 ## Usage

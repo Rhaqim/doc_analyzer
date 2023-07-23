@@ -30,101 +30,101 @@ def analyze_loan_agreement(text_content: str) -> dict:
     return keyword_occurrences
 
 
-# Load spaCy language model
-nlp = spacy.load("en_core_web_sm")
+# # Load spaCy language model
+# nlp = spacy.load("en_core_web_sm")
 
-# Prepare your labeled document dataset
-documents = [
-    "This is a positive document.",
-    "Another positive review.",
-    "Negative sentiment in this one.",
-    "Yet another negative document.",
-    # Add more documents and corresponding labels here
-]
+# # Prepare your labeled document dataset
+# documents = [
+#     "This is a positive document.",
+#     "Another positive review.",
+#     "Negative sentiment in this one.",
+#     "Yet another negative document.",
+#     # Add more documents and corresponding labels here
+# ]
 
-labels = ["positive", "positive", "negative", "negative"]
+# labels = ["positive", "positive", "negative", "negative"]
 
-# Tokenize and vectorize the documents using spaCy
-def tokenize_and_vectorize(text: str) -> str:
-    doc = nlp(text)
-    return " ".join(token.lemma_ for token in doc if not token.is_punct and not token.is_stop)
+# # Tokenize and vectorize the documents using spaCy
+# def tokenize_and_vectorize(text: str) -> str:
+#     doc = nlp(text)
+#     return " ".join(token.lemma_ for token in doc if not token.is_punct and not token.is_stop)
 
-vectorizer = TfidfVectorizer(tokenizer=tokenize_and_vectorize)
-X = vectorizer.fit_transform(documents)
+# vectorizer = TfidfVectorizer(tokenizer=tokenize_and_vectorize)
+# X = vectorizer.fit_transform(documents)
 
-# Train the SVM classifier
-classifier = SVC(kernel="linear")
-classifier.fit(X, labels)
+# # Train the SVM classifier
+# classifier = SVC(kernel="linear")
+# classifier.fit(X, labels)
 
-# Evaluate the model
-y_pred = classifier.predict(X)
-accuracy = accuracy_score(labels, y_pred)
-report = classification_report(labels, y_pred)
+# # Evaluate the model
+# y_pred = classifier.predict(X)
+# accuracy = accuracy_score(labels, y_pred)
+# report = classification_report(labels, y_pred)
 
-print("Accuracy:", accuracy)
-print("Classification Report:")
-print(report)
+# print("Accuracy:", accuracy)
+# print("Classification Report:")
+# print(report)
 
-# Classify new documents
-new_documents = [
-    "An unknown document.",
-    "A positive review of the product.",
-]
+# # Classify new documents
+# new_documents = [
+#     "An unknown document.",
+#     "A positive review of the product.",
+# ]
 
-X_new = vectorizer.transform(new_documents)
-predictions = classifier.predict(X_new)
+# X_new = vectorizer.transform(new_documents)
+# predictions = classifier.predict(X_new)
 
-print("Predictions for new documents:")
-for doc, prediction in zip(new_documents, predictions):
-    print(f"Document: {doc}, Predicted Label: {prediction}")
+# print("Predictions for new documents:")
+# for doc, prediction in zip(new_documents, predictions):
+#     print(f"Document: {doc}, Predicted Label: {prediction}")
 
 
 
-# Load spaCy language model
-nlp = spacy.load("en_core_web_sm")
+# # Load spaCy language model
+# nlp = spacy.load("en_core_web_sm")
 
-# Prepare your labeled document dataset
-small_loan_agreements = [
-    "This is a small loan agreement document.",
-    "Another small loan agreement.",
-    # Add more small loan agreement documents here
-]
+# # Prepare your labeled document dataset
+# small_loan_agreements = [
+#     "This is a small loan agreement document.",
+#     "Another small loan agreement.",
+#     # Add more small loan agreement documents here
+# ]
 
-promissory_note_security_agreements = [
-    "This is a Promissory Note Security Agreement.",
-    "Another Promissory Note Security Agreement.",
-    # Add more Promissory Note Security Agreement documents here
-]
+# promissory_note_security_agreements = [
+#     "This is a Promissory Note Security Agreement.",
+#     "Another Promissory Note Security Agreement.",
+#     # Add more Promissory Note Security Agreement documents here
+# ]
 
-# Combine the datasets and corresponding labels
-documents = small_loan_agreements + promissory_note_security_agreements
-labels = ["small_loan_agreement"] * len(small_loan_agreements) + ["promissory_note_security_agreement"] * len(promissory_note_security_agreements)
+# # Combine the datasets and corresponding labels
+# documents = small_loan_agreements + promissory_note_security_agreements
+# labels = ["small_loan_agreement"] * len(small_loan_agreements) + ["promissory_note_security_agreement"] * len(promissory_note_security_agreements)
 
-vectorizer = TfidfVectorizer(tokenizer=tokenize_and_vectorize)
-X = vectorizer.fit_transform(documents)
+# vectorizer = TfidfVectorizer(tokenizer=tokenize_and_vectorize)
+# X = vectorizer.fit_transform(documents)
 
-# Train the SVM classifier
-classifier = SVC(kernel="linear")
-classifier.fit(X, labels)
+# # Train the SVM classifier
+# classifier = SVC(kernel="linear")
+# classifier.fit(X, labels)
 
-# Evaluate the model
-y_pred = classifier.predict(X)
-accuracy = accuracy_score(labels, y_pred)
-report = classification_report(labels, y_pred)
+# # Evaluate the model
+# y_pred = classifier.predict(X)
+# accuracy = accuracy_score(labels, y_pred)
+# report = classification_report(labels, y_pred)
 
-print("Accuracy:", accuracy)
-print("Classification Report:")
-print(report)
+# print("Accuracy:", accuracy)
+# print("Classification Report:")
+# print(report)
 
-# Classify new documents
-new_documents = [
-    "A new small loan agreement document.",
-    "A new Promissory Note Security Agreement.",
-]
+# # Classify new documents
+# new_documents = [
+#     "A new small loan agreement document.",
+#     "A new Promissory Note Security Agreement.",
+# ]
 
-X_new = vectorizer.transform(new_documents)
-predictions = classifier.predict(X_new)
+# X_new = vectorizer.transform(new_documents)
+# predictions = classifier.predict(X_new)
 
-print("Predictions for new documents:")
-for doc, prediction in zip(new_documents, predictions):
-    print(f"Document: {doc}, Predicted Label: {prediction}")
+# print("Predictions for new documents:")
+# for doc, prediction in zip(new_documents, predictions):
+#     print(f"Document: {doc}, Predicted Label: {prediction}")

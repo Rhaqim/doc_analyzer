@@ -94,4 +94,4 @@ def pipeline(existing_model_path, new_data_path):
 existing_model_path = "path_to_existing_model"  # Replace with the path to your existing model
 new_data_path = "path_to_new_data.csv"  # Replace with the path to your new data file
 
-pipeline(existing_model_path, new_data_path)
+# pipeline(existing_model_path, new_data_path)

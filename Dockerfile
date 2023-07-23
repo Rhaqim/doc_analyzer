@@ -3,7 +3,7 @@ FROM python:3.11
 
 # Install system dependencies required for OpenCV, pytesseract, poppler, and tesseract
 RUN apt-get update \
-    && apt-get install -y poppler-utils tesseract-ocr libgl1-mesa-glx transformers \
+    && apt-get install -y poppler-utils tesseract-ocr libgl1-mesa-glx libpq-dev python3-psycopg2 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -29,7 +29,7 @@ RUN poetry config virtualenvs.create false && \
     poetry install --no-interaction --no-ansi
 
 # Expose the Flask app's port (assuming your Flask app is using port 5000)
-# EXPOSE 5000
+EXPOSE 5001
 
 # Start the Flask app
 CMD ["python", "doc_analyzer/main.py"]

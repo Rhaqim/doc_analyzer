@@ -1,2 +1,4 @@
 .venv
 uploads
+app.log
+models/

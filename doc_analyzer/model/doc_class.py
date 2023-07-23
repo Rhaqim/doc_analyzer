@@ -9,18 +9,24 @@ from torch.utils.data import DataLoader, TensorDataset
 from transformers import BertForSequenceClassification, BertTokenizer
 
 from doc_analyzer.config import CLASSIFIER_MODEL_PATH
+from doc_analyzer.database.doc_queries import get_document_for_model_train
+
+# %%
+# Get documents from database
+data = get_document_for_model_train()
+# %%
 
 # %%
 # Sample dataset (replace with your actual data)
-data = {
-    "text": [
-        "This is a business plan for our company.",
-        "Another business plan for the new project.",
-        "A pitch deck for our startup idea.",
-        "Pitch deck with our growth strategy.",
-    ],
-    "label": ["business_plan", "business_plan", "pitch_deck", "pitch_deck"],
-}
+# data = {
+#     "text": [
+#         "This is a business plan for our company.",
+#         "Another business plan for the new project.",
+#         "A pitch deck for our startup idea.",
+#         "Pitch deck with our growth strategy.",
+#     ],
+#     "label": ["business_plan", "business_plan", "pitch_deck", "pitch_deck"],
+# }
 
 df = pd.DataFrame(data)
 # %%
@@ -100,4 +106,3 @@ print(report)
 if accuracy > 0.9:
     model.save_pretrained(CLASSIFIER_MODEL_PATH)
     tokenizer.save_pretrained("model")
-# %%

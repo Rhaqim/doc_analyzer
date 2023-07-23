@@ -11,7 +11,7 @@ from transformers import BertForSequenceClassification, BertTokenizer
 # %%
 # Load the pre-trained model and tokenizer
 model_name = "bert-base-uncased"
-model_path = CLASSIFIER_MODEL_PATH / "model.pt"
+model_path = CLASSIFIER_MODEL_PATH / "pytorch_model.bin"
 tokenizer = BertTokenizer.from_pretrained(model_name)
 model = BertForSequenceClassification.from_pretrained(
     model_name, num_labels=2
