@@ -1,8 +1,12 @@
 import os
 
 import cv2
+import numpy as np
 import pytesseract
-from logger import logger
+from flask import current_app
+from PIL import Image
+
+from doc_analyzer.logger import logger
 
 
 def normalize(image_path: str) -> str:
@@ -34,7 +38,43 @@ def normalize(image_path: str) -> str:
 
     return normalized_text
 
-# Function to perform OCR on scanned images
+
 def perform_ocr(image_path: str) -> str:
     logger.info("Performing OCR")
-    return pytesseract.image_to_string(image_path)
+
+    # Perform OCR using Tesseract
+    custom_config = r"--oem 3 --psm 6"
+    ocr_text = pytesseract.image_to_string(Image.open(image_path), config=custom_config)
+
+    return ocr_text
+
+
+def normalize_image(image: Image.Image) -> str:
+    logger.info("Normalizing image")
+
+    # Convert the image to OpenCV format
+    image_cv = cv2.cvtColor(np.array(image), cv2.COLOR_RGB2BGR)
+
+    # Resize the image to a standard size for better OCR results (you can adjust the size)
+    resized_image = cv2.resize(image_cv, None, fx=2, fy=2, interpolation=cv2.INTER_LINEAR)
+
+    # Convert the image to grayscale for better text visibility
+    grayscale_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
+
+    # Apply adaptive thresholding to improve text visibility against various backgrounds
+    _, threshold_image = cv2.threshold(grayscale_image, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+    # Perform OCR on the normalized image
+    normalized_text = perform_ocr_image_byte(threshold_image)
+
+    return normalized_text
+
+
+def perform_ocr_image_byte(image: np.ndarray) -> str:
+    logger.info("Performing OCR")
+
+    # Perform OCR using Tesseract
+    custom_config = r"--oem 3 --psm 6"
+    ocr_text = pytesseract.image_to_string(Image.fromarray(image), config=custom_config)
+
+    return ocr_text
