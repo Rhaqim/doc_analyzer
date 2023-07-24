@@ -2,7 +2,12 @@
 
 ## Description
 
-This is a simple document analyzer app that accepts a file upload and outputs the total word count, the count of each word, and the top 10 words by count in descending order.
+This is a simple document analyzer app that can be used to train a model to classify documents into different categories.
+It is separated into three parts:
+
+1. The Upload (Test data) section, where you can upload documents and get the classification results.
+2. The Upload (Train data) section, where you can upload documents and save them to the database.
+3. The Training section, where you can select documents from the database and train a model to classify them.
 
 ## Installation
 
@@ -24,6 +29,4 @@ docker-compose up
 
 ## Usage
 
-1. Navigate to `http://localhost:5001/upload`
-2. Select a file to upload
-3. Check terminal for output
+1. Navigate to `http://localhost:5001` in your browser.
