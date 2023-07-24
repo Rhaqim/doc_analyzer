@@ -3,3 +3,4 @@ uploads
 app.log
 models/
 __pycache__/
+.DS_Store

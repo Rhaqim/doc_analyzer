@@ -88,25 +88,15 @@
 		<div class="content" id="upload-content">
 			<!-- Add content for the Upload tab here -->
 			<p>Accepted files: pdf, images, docX</p>
-			<div
-				class="upload-box"
-				onclick="browseFiles()"
-				action="/upload"
-				method="post"
-				enctype="multipart/form-data"
-			>
-				<form id="upload-form">
-					<label for="file-input">
-						Browse Files
-						<input
-							type="file"
-							id="file-input"
-							name="file"
-							accept=".pdf, .jpg, .jpeg, .png, .gif, .docx"
-						/>
-					</label>
-				</form>
+			<div class="upload-box" onclick="browseFiles()" id="upload-form">
+				<label for="file-input"> Browse Files </label>
 			</div>
+			<input
+				type="file"
+				id="file-input"
+				name="file"
+				accept=".pdf, .jpg, .jpeg, .png, .gif, .docx"
+			/>
 
 			<div id="uploaded-files">
 				<!-- Uploaded files will be displayed here -->
@@ -116,7 +106,7 @@
 			</button>
 		</div>
 
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 		<script>
 			function showTab(tabName) {
 				var tabs = document.querySelectorAll(".tab");
@@ -158,9 +148,9 @@
 						if (data.documents.length > 0) {
 							data.documents.forEach(document => {
 								documentListHTML += `
-                                <input type="checkbox" name="document" value="${document.id}" onclick="checkTrainButton()">
-                                <label>${document.name}</label><br>
-                            `;
+			                             <input type="checkbox" name="document" value="${document.id}" onclick="checkTrainButton()">
+			                             <label>${document.name}</label><br>
+			                         `;
 							});
 							documentList.innerHTML = documentListHTML; // Set the HTML content all at once
 
@@ -205,6 +195,7 @@
 
 			// Function to handle the file browsing action
 			function browseFiles() {
+				console.log("Browse files clicked");
 				document.getElementById("file-input").click();
 			}
 
@@ -251,6 +242,7 @@
 
 			// Function to handle file upload
 			function handleFileUpload(event) {
+				console.log("Files selected:", event.target.files);
 				const fileInput = event.target;
 				const files = fileInput.files;
 
@@ -297,6 +289,15 @@
 				if (uploadedFilesContainer.children.length === 0) {
 					document.getElementById("upload-btn").style.display = "none";
 				}
+
+				clearFileInput();
+			}
+
+			// clearFileInput clears the file input element
+			function clearFileInput() {
+				const fileInput = document.getElementById("file-input");
+				fileInput.value = "";
+				fileInput.addEventListener("change", handleFileUpload);
 			}
 
 			// Fetch the documents when the page loads
