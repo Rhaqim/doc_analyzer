@@ -17,8 +17,8 @@ ENV PATH="/root/.local/bin:$PATH"
 WORKDIR /app
 
 # Install spaCy language model 'en_core_web_sm'
-RUN pip install spacy
-RUN python -m spacy download en_core_web_sm
+RUN pip install spacy transformers[torch] && \
+    python -m spacy download en_core_web_sm
 
 # Copy the project files into the container
 COPY doc_analyzer /app/doc_analyzer
