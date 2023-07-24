@@ -38,6 +38,20 @@
 			.content.active {
 				display: block;
 			}
+			/* Style for the upload box */
+			.upload-box {
+				border: 2px dashed #fff;
+				border-radius: 8px;
+				padding: 20px;
+				margin-top: 20px;
+				width: 300px;
+				margin: 0 auto;
+				cursor: pointer;
+			}
+			/* Hide the file input element */
+			#file-input {
+				display: none;
+			}
 		</style>
 	</head>
 	<body>
@@ -58,7 +72,20 @@
 		</div>
 		<div class="content" id="upload-content">
 			<!-- Add content for the Upload tab here -->
-			<p>Content for the Upload tab goes here.</p>
+			<p>Accepted files: pdf, images, docX</p>
+			<div class="upload-box" onclick="browseFiles()">
+				<form id="upload-form">
+					<label for="file-input">
+						Browse Files
+						<input
+							type="file"
+							id="file-input"
+							name="file"
+							accept=".pdf, .jpg, .jpeg, .png, .gif, .docx"
+						/>
+					</label>
+				</form>
+			</div>
 		</div>
 
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -146,6 +173,24 @@
 				});
 				// You can implement an API call here to send the selectedDocuments to the Flask backend for further processing
 				console.log("Selected Documents:", selectedDocuments);
+			}
+
+			// Function to handle the file browsing action
+			function browseFiles() {
+				document.getElementById("file-input").click();
+			}
+
+			// Event listener for file selection
+			document
+				.getElementById("file-input")
+				.addEventListener("change", handleFileUpload);
+
+			// Function to handle file upload
+			function handleFileUpload(event) {
+				const fileInput = event.target;
+				const files = fileInput.files;
+				// You can implement the logic to handle the file upload here
+				console.log("Selected Files:", files);
 			}
 
 			// Fetch the documents when the page loads
