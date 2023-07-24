@@ -1,6 +1,7 @@
 from typing import Any, Iterable, List, Optional
 
 import torch
+from pandas import DataFrame
 from sklearn.metrics import accuracy_score, classification_report
 from sklearn.model_selection import train_test_split
 from torch.nn import CrossEntropyLoss
@@ -28,13 +29,19 @@ class DocumentClassifierModel:
         self.train_dataset: Optional[TensorDataset] = None
         self.test_dataset: Optional[TensorDataset] = None
 
-    def load_data(self):
+    def load_data(self, new_data: Optional[DataFrame] = None):
         """Load the data from the database and prepare it for training"""
 
         try:
+            logger.info("Loading data")
+
             # Get documents from database
             data = get_document_for_model_train()
             df = data
+
+            # If new data is provided let it override the existing data
+            if new_data is not None:
+                df = new_data
 
             # Split the dataset into train and test sets
             X_train, X_test, y_train, y_test = train_test_split(
@@ -183,7 +190,7 @@ class DocumentClassifierModel:
             predicted_class = torch.argmax(probabilities).item()
             class_labels: List = ["loan_agreement", "guaranty_agreement"]  # 0: loan_agreement, 1: guaranty_agreement
             predicted_label = class_labels[predicted_class]  # type: ignore
-            confidence = probabilities[0][predicted_class].item() # type: ignore
+            confidence = probabilities[0][predicted_class].item()  # type: ignore
 
             logger.info(f"Predicted Label: {predicted_label}, Confidence: {confidence}")
 

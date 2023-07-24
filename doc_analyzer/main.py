@@ -1,6 +1,10 @@
 import io
 
-from database.doc_queries import insert_into_documents_table
+from database.doc_queries import (
+    get_all_documents,
+    get_document_for_model_train,
+    insert_into_documents_table,
+)
 from flask import Flask, jsonify, render_template, request
 from logger import logger
 from model.doc import DocumentClassifierModel
@@ -101,26 +105,34 @@ def train_model():
     if request.method == "POST":
         training = True
 
+        # get the ids of the documents to be used for training
+        doc_ids = request.form.getlist("doc_ids")
+
+        # get the documents from the database
+        documents = get_document_for_model_train(doc_ids)
+
         train = DocumentClassifierModel()
 
-        train.load_data()
+        train.load_data(new_data=documents)
         train.train()
 
-        return render_template("train.html", training=training)
+        # return render_template("train.html", training=training)
+        jsonify(
+            {
+                "training": training,
+            }
+        )
 
     return render_template("train.html")
 
 
 # Route to fetch documents from the backend
-@app.route("/get_documents", methods=["GET"])
+@app.route("/get_documents", methods=["GET", "POST"])
 def get_documents():
-    # Example data for documents (you can replace this with data from your database)
-    documents = [
-        {"id": 1, "name": "Document 1"},
-        {"id": 2, "name": "Document 2"},
-        {"id": 3, "name": "Document 3"},
-        # Add more documents as needed
-    ]
+    # Get all documents from the database
+    documents = get_all_documents()
+
+    logger.info(f"The documents are: {documents}")
 
     return jsonify({"documents": documents}), 200
 
