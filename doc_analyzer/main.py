@@ -1,4 +1,5 @@
 import io
+import json
 
 from database.doc_queries import (
     get_all_documents,
@@ -83,10 +84,7 @@ def upload_file():
             predicted_label, confidence = classifier.classify_document(text_content)
 
             # Insert the processed document into the database
-            # insert_into_documents_table(doc_name, doc_type, predicted_label, text_content)
-
-            # Return the processed file to the upload page
-            # return render_template("upload.html", predicted_label=predicted_label, confidence=confidence)
+            insert_into_documents_table(doc_name, doc_type, predicted_label, text_content)
 
             return jsonify(
                 {
@@ -100,13 +98,13 @@ def upload_file():
 
 @app.route("/train", methods=["GET", "POST"])
 def train_model():
-    training = False
-
     if request.method == "POST":
         training = True
 
-        # get the ids of the documents to be used for training
-        doc_ids = request.form.getlist("doc_ids")
+        # get the ids from the body with a key of doc_ids
+        doc_ids = request.json["doc_ids"]  # type: ignore
+
+        logger.info(f"Received doc ids: {doc_ids}")
 
         # get the documents from the database
         documents = get_document_for_model_train(doc_ids)
@@ -116,12 +114,7 @@ def train_model():
         train.load_data(new_data=documents)
         train.train()
 
-        # return render_template("train.html", training=training)
-        jsonify(
-            {
-                "training": training,
-            }
-        )
+        jsonify({"training": "true"})
 
     return render_template("train.html")
 

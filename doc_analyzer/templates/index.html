@@ -195,6 +195,36 @@
 				});
 				// You can implement an API call here to send the selectedDocuments to the Flask backend for further processing
 				console.log("Selected Documents:", selectedDocuments);
+
+				// send a POST request to the backend endpoint /train
+				fetch("/train", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({ doc_ids: selectedDocuments }),
+				})
+					.then(response => response.json())
+					.then(data => {
+						// handle data returned
+						console.log("Data:", data);
+						if (data.message) {
+							alert(data.message);
+						}
+					})
+					.catch(error => {
+						console.error("Error training documents:", error);
+					});
+
+				// Clear the document list
+				document.getElementById("document-list").innerHTML =
+					"<p>No documents available.</p>";
+
+				// Hide the train button
+				document.getElementById("train-btn").style.display = "none";
+
+				// Reset the flag
+				isDocumentListPopulated = false;
 			}
 
 			// Function to handle the file browsing action
@@ -235,19 +265,10 @@
 								"<p>Confidence: " +
 								data.confidence +
 								"</p>";
+						} else {
+							document.getElementById("prediction").innerHTML =
+								"<p>Unable to predict</p>";
 						}
-
-						/* if (data.predicted_label) {
-							// Put the prediction into the HTML
-							document.getElementById("predicted-label").innerHTML =
-								data.predicted_label;
-						}
-
-						if (data.confidence) {
-							// Put the prediction into the HTML
-							document.getElementById("confidence").innerHTML = data.confidence;
-						}
-						*/
 					})
 					.catch(error => {
 						console.error("Error uploading files:", error);
