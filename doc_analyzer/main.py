@@ -1,7 +1,7 @@
 import io
 
 from database.doc_queries import insert_into_documents_table
-from flask import Flask, render_template, request
+from flask import Flask, jsonify, render_template, request
 from logger import logger
 from model.doc import DocumentClassifierModel
 from pdf2image.pdf2image import convert_from_bytes
@@ -102,6 +102,20 @@ def train_model():
         return render_template("train.html", training=training)
 
     return render_template("train.html")
+
+
+# Route to fetch documents from the backend
+@app.route("/get_documents", methods=["GET"])
+def get_documents():
+    # Example data for documents (you can replace this with data from your database)
+    documents = [
+        {"id": 1, "name": "Document 1"},
+        {"id": 2, "name": "Document 2"},
+        {"id": 3, "name": "Document 3"},
+        # Add more documents as needed
+    ]
+
+    return jsonify({"documents": documents}), 200
 
 
 if __name__ == "__main__":
