@@ -52,6 +52,21 @@
 			#file-input {
 				display: none;
 			}
+			/* Style for the uploaded files container */
+			#uploaded-files {
+				margin-top: 20px;
+			}
+			/* Style for the X button */
+			.remove-file {
+				cursor: pointer;
+				color: red;
+				margin-left: 10px;
+			}
+			/* Style for the upload button */
+			#upload-btn {
+				margin-top: 20px;
+				display: none;
+			}
 		</style>
 	</head>
 	<body>
@@ -73,7 +88,13 @@
 		<div class="content" id="upload-content">
 			<!-- Add content for the Upload tab here -->
 			<p>Accepted files: pdf, images, docX</p>
-			<div class="upload-box" onclick="browseFiles()">
+			<div
+				class="upload-box"
+				onclick="browseFiles()"
+				action="/upload"
+				method="post"
+				enctype="multipart/form-data"
+			>
 				<form id="upload-form">
 					<label for="file-input">
 						Browse Files
@@ -86,6 +107,13 @@
 					</label>
 				</form>
 			</div>
+
+			<div id="uploaded-files">
+				<!-- Uploaded files will be displayed here -->
+			</div>
+			<button id="upload-btn" onclick="uploadFiles()" style="display: none">
+				Upload
+			</button>
 		</div>
 
 		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -185,12 +213,90 @@
 				.getElementById("file-input")
 				.addEventListener("change", handleFileUpload);
 
+			// uploadFiles send file to backend endpoint /upload
+			function uploadFiles() {
+				const fileInput = document.getElementById("file-input");
+				const files = fileInput.files;
+				const formData = new FormData();
+				for (let i = 0; i < files.length; i++) {
+					formData.append("file", files[i]);
+				}
+				fetch("/upload", {
+					method: "POST",
+					body: formData,
+				})
+					.then(response => response.json())
+					.then(data => {
+						console.log("Uploaded files:", data.files);
+						const uploadedFiles = document.getElementById("uploaded-files");
+						let uploadedFilesHTML = ""; // Initialize the string to store HTML content
+						if (data.files.length > 0) {
+							data.files.forEach(file => {
+								uploadedFilesHTML += `
+								<div>
+									<span>${file.name}</span>
+									<span class="remove-file" onclick="removeFile('${file.name}')">X</span>
+								</div>
+							`;
+							});
+							uploadedFiles.innerHTML = uploadedFilesHTML; // Set the HTML content all at once
+						} else {
+							uploadedFiles.innerHTML = "<p>No files uploaded.</p>";
+						}
+					})
+					.catch(error => {
+						console.error("Error uploading files:", error);
+					});
+			}
+
 			// Function to handle file upload
 			function handleFileUpload(event) {
 				const fileInput = event.target;
 				const files = fileInput.files;
-				// You can implement the logic to handle the file upload here
-				console.log("Selected Files:", files);
+
+				const uploadedFilesContainer =
+					document.getElementById("uploaded-files");
+				uploadedFilesContainer.innerHTML = ""; // Clear the container before adding files
+
+				if (files.length > 0) {
+					const fragment = document.createDocumentFragment();
+
+					for (const file of files) {
+						const fileEntry = document.createElement("div");
+						fileEntry.textContent = file.name;
+
+						const removeButton = document.createElement("span");
+						removeButton.textContent = "X";
+						removeButton.classList.add("remove-file");
+						removeButton.onclick = () => removeFile(fileEntry);
+
+						fileEntry.appendChild(removeButton);
+						fragment.appendChild(fileEntry);
+					}
+
+					uploadedFilesContainer.appendChild(fragment);
+
+					// Show the upload button
+					document.getElementById("upload-btn").style.display = "block";
+
+					// Remove the event listener to prevent the file input from opening again
+					fileInput.removeEventListener("change", handleFileUpload);
+				} else {
+					// Hide the upload button if no files are selected
+					document.getElementById("upload-btn").style.display = "none";
+				}
+			}
+
+			// Function to remove a file from the uploaded files list
+			function removeFile(fileEntry) {
+				const uploadedFilesContainer =
+					document.getElementById("uploaded-files");
+				uploadedFilesContainer.removeChild(fileEntry);
+
+				// Hide the upload button if no files are selected
+				if (uploadedFilesContainer.children.length === 0) {
+					document.getElementById("upload-btn").style.display = "none";
+				}
 			}
 
 			// Fetch the documents when the page loads

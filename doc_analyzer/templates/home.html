@@ -58,23 +58,3 @@
 		</script>
 	</body>
 </html>
-
-<form id="upload-form">
-	<label for="file-input" class="upload-box">
-		Browse Files
-		<input
-			type="file"
-			id="file-input"
-			name="file"
-			accept=".pdf, .jpg, .jpeg, .png, .gif, .docx"
-		/>
-	</label>
-</form>
-
-// Function to handle the file browsing action function browseFiles() {
-document.getElementById("file-input").click(); } // Event listener for file
-selection document .getElementById("file-input") .addEventListener("change",
-handleFileUpload); // Function to handle file upload function
-handleFileUpload(event) { const fileInput = event.target; const files =
-fileInput.files; // You can implement the logic to handle the file upload here
-console.log("Selected Files:", files); }
