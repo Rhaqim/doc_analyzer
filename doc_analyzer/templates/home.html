@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Doc Analyzer</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css"
+			rel="stylesheet"
+		/>
+	</head>
+
+	<body class="bg-black text-neon-white">
+		<div class="container mx-auto p-4">
+			<h1 class="text-3xl font-bold mb-4 text-white">Doc Analyzer</h1>
+			<ul class="flex border-b border-t border-gray-500">
+				<li class="-mb-px mr-1">
+					<a
+						class="bg-black inline-block py-2 px-4 font-semibold text-white border-b-2 border-neon-white"
+						href="#train"
+						>Train</a
+					>
+				</li>
+				<li class="mr-1">
+					<a
+						class="bg-black inline-block py-2 px-4 font-semibold text-white"
+						href="#upload"
+						>Upload</a
+					>
+				</li>
+			</ul>
+			<div class="py-4">
+				<div id="train" class="hidden">
+					<!-- Content for Train tab -->
+					<p>Content for Train tab goes here.</p>
+				</div>
+				<div id="upload" class="hidden">
+					<!-- Content for Upload tab -->
+					<p>Content for Upload tab goes here.</p>
+				</div>
+			</div>
+		</div>
+
+		<script>
+			// JavaScript to handle tab switching
+			const tabs = document.querySelectorAll("ul li a");
+			const tabContents = document.querySelectorAll("div[id]");
+
+			tabs.forEach((tab, index) => {
+				tab.addEventListener("click", e => {
+					e.preventDefault();
+					tabs.forEach(t => t.classList.remove("bg-neon-white", "text-white"));
+					tab.classList.add("bg-neon-white", "text-white");
+					tabContents.forEach(tc => tc.classList.add("hidden"));
+					tabContents[index].classList.remove("hidden");
+				});
+			});
+		</script>
+	</body>
+</html>

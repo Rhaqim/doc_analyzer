@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Doc Analyzer</title>
+		<style>
+			body {
+				background-color: #000;
+				color: #fff;
+				font-family: Arial, sans-serif;
+			}
+			.header {
+				text-align: center;
+				padding: 20px;
+				font-size: 24px;
+				font-weight: bold;
+			}
+			.tabs {
+				display: flex;
+				justify-content: center;
+				margin-top: 50px;
+			}
+			.tab {
+				padding: 10px 20px;
+				cursor: pointer;
+				border: 2px solid #fff;
+				border-radius: 8px;
+				margin: 0 10px;
+			}
+			.tab.active {
+				background-color: #fff;
+				color: #000;
+			}
+			.content {
+				display: none;
+				text-align: center;
+				margin-top: 30px;
+			}
+			.content.active {
+				display: block;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="header">Doc Analyzer</div>
+		<div class="tabs">
+			<div class="tab active" onclick="showTab('train')">Train</div>
+			<div class="tab" onclick="showTab('upload')">Upload</div>
+		</div>
+		<div class="content active" id="train-content">
+			<!-- Add content for the Train tab here -->
+			<p>Content for the Train tab goes here.</p>
+		</div>
+		<div class="content" id="upload-content">
+			<!-- Add content for the Upload tab here -->
+			<p>Content for the Upload tab goes here.</p>
+		</div>
+
+		<script>
+			function showTab(tabName) {
+				var tabs = document.querySelectorAll(".tab");
+				for (var i = 0; i < tabs.length; i++) {
+					tabs[i].classList.remove("active");
+				}
+
+				var contents = document.querySelectorAll(".content");
+				for (var i = 0; i < contents.length; i++) {
+					contents[i].classList.remove("active");
+				}
+
+				var tab = document.getElementById(tabName + "-content");
+				var correspondingTab = document.querySelector(
+					`[onclick*="${tabName}"]`
+				);
+
+				tab.classList.add("active");
+				correspondingTab.classList.add("active");
+			}
+		</script>
+	</body>
+</html>
