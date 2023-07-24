@@ -104,6 +104,10 @@
 			<button id="upload-btn" onclick="uploadFiles()" style="display: none">
 				Upload
 			</button>
+
+			<div id="prediction">
+				<!-- Prediction will be displayed here -->
+			</div>
 		</div>
 
 		<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
@@ -218,26 +222,39 @@
 				})
 					.then(response => response.json())
 					.then(data => {
-						console.log("Uploaded files:", data.files);
-						const uploadedFiles = document.getElementById("uploaded-files");
-						let uploadedFilesHTML = ""; // Initialize the string to store HTML content
-						if (data.files.length > 0) {
-							data.files.forEach(file => {
-								uploadedFilesHTML += `
-								<div>
-									<span>${file.name}</span>
-									<span class="remove-file" onclick="removeFile('${file.name}')">X</span>
-								</div>
-							`;
-							});
-							uploadedFiles.innerHTML = uploadedFilesHTML; // Set the HTML content all at once
-						} else {
-							uploadedFiles.innerHTML = "<p>No files uploaded.</p>";
+						// handle data returned keys are predicted_label, confidence, text_content
+						console.log("Data:", data);
+						clearFileInput();
+
+						if (data.predicted_label && data.confidence) {
+							// Put the prediction into the HTML
+							document.getElementById("prediction").innerHTML =
+								"<p>Label: " +
+								data.predicted_label +
+								"</p>" +
+								"<p>Confidence: " +
+								data.confidence +
+								"</p>";
 						}
+
+						/* if (data.predicted_label) {
+							// Put the prediction into the HTML
+							document.getElementById("predicted-label").innerHTML =
+								data.predicted_label;
+						}
+
+						if (data.confidence) {
+							// Put the prediction into the HTML
+							document.getElementById("confidence").innerHTML = data.confidence;
+						}
+						*/
 					})
 					.catch(error => {
 						console.error("Error uploading files:", error);
 					});
+
+				// Clear the uploaded files container
+				clearFileInput();
 			}
 
 			// Function to handle file upload

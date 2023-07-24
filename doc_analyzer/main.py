@@ -79,10 +79,17 @@ def upload_file():
             predicted_label, confidence = classifier.classify_document(text_content)
 
             # Insert the processed document into the database
-            insert_into_documents_table(doc_name, doc_type, predicted_label, text_content)
+            # insert_into_documents_table(doc_name, doc_type, predicted_label, text_content)
 
             # Return the processed file to the upload page
-            return render_template("upload.html", predicted_label=predicted_label, confidence=confidence)
+            # return render_template("upload.html", predicted_label=predicted_label, confidence=confidence)
+
+            return jsonify(
+                {
+                    "predicted_label": predicted_label,
+                    "confidence": confidence,
+                }
+            )
 
     return render_template("upload.html")
 
