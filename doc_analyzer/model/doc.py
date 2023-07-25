@@ -52,8 +52,14 @@ class DocumentClassifierModel:
             self.train_encodings = self.tokenizer(list(X_train), truncation=True, padding=True, return_tensors="pt")
             self.test_encodings = self.tokenizer(list(X_test), truncation=True, padding=True, return_tensors="pt")
 
-            # Convert labels to integers or category codes
-            label2id = {"loan_agreement": 0, "guaranty_agreement": 1}
+            # get labels from doc_category column
+            labels = df["doc_category"].astype("category").cat.categories.tolist()
+
+            # create a dictionary with the labels as keys and the category codes as values
+            label2id = {k: v for v, k in enumerate(labels)}
+
+            logger.info(f"Label2id: {label2id}")
+
             y_train = [label2id[label] for label in y_train]
             y_test = [label2id[label] for label in y_test]
 

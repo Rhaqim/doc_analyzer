@@ -24,7 +24,7 @@ def create_documents_table():
         name VARCHAR(255) NOT NULL,
         doc_type VARCHAR(255) NOT NULL,
         doc_category VARCHAR(255) NOT NULL,
-        content VARCHAR(255) NOT NULL,
+        content VARCHAR NOT NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     """
     create_tables(table_name, table_columns)
